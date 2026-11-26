@@ -1,7 +1,3 @@
-# Uso: python evaluar.py archivo.csv [eps] [minPts]
-# - Acepta csv con o sin cabecera, separador , o ; y columnas no numericas (se ignoran)
-# - Si no das eps, lo sugiere con el grafico k-distance
-# - Muestra: clusters, outliers, silhouette, tiempos (clasico vs KDTree) y guarda la grafica
 import sys, os, re, subprocess
 import numpy as np, pandas as pd, matplotlib
 import matplotlib.pyplot as plt
@@ -22,7 +18,7 @@ print(f"Datos: {n} puntos, {d} dimensiones")
 minPts = int(sys.argv[3]) if len(sys.argv) > 3 else max(4, 2 * d)
 if len(sys.argv) > 2:
     eps = float(sys.argv[2])
-else:                                                                      # eps sugerido: codo del k-distance
+else:                                                                      # eps sugerido
     kd = np.sort(NearestNeighbors(n_neighbors=minPts).fit(X).kneighbors(X)[0][:, -1])
     x = np.arange(n); p1, p2 = np.array([0, kd[0]]), np.array([n - 1, kd[-1]])
     v = p2 - p1; w = np.c_[x, kd] - p1

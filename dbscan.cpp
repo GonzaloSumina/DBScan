@@ -29,7 +29,7 @@ vector<Punto> leerCSV(const string& archivo) {
     return pts;
 }
 
-// ---------- KDTree ----------
+// KDTree
 struct KDTree {
     struct Nodo { int idx; int izq = -1, der = -1; };
     const vector<Punto>& P;
@@ -43,7 +43,7 @@ struct KDTree {
         nodos.reserve(pts.size());
         raiz = construir(ids, 0, ids.size(), 0);
     }
-    // Construye con la mediana en cada nivel: O(n log n)
+    // Construye con la mediana en cada nivel
     int construir(vector<int>& ids, int ini, int fin, int prof) {
         if (ini >= fin) return -1;
         int eje = prof % k, med = (ini + fin) / 2;
@@ -56,7 +56,7 @@ struct KDTree {
         nodos[id].izq = i; nodos[id].der = d;
         return id;
     }
-    // Consulta por rango: todos los puntos a distancia <= eps de q
+    // Consulta por rango(todos los puntos a distancia <= eps de q)
     void rango(int n, const Punto& q, double eps, double eps2, int prof, vector<int>& res) const {
         if (n < 0) return;
         const Nodo& nd = nodos[n];
@@ -73,9 +73,9 @@ struct KDTree {
     }
 };
 
-// ---------- DBSCAN ----------
-// Etiquetas: 0 = sin procesar, -1 = ruido, 1..K = cluster
-// 'vecinosFn' devuelve los vecinos (incluido el propio punto) de un punto.
+// DBSCAN
+// 0 = sin procesar -1 = ruido 1..K = cluster
+// 'vecinosFn' devuelve los vecinos de un punto.
 template <class F>
 vector<int> dbscan(int n, int minPts, F vecinosFn) {
     vector<int> etiqueta(n, 0);
@@ -101,7 +101,7 @@ vector<int> dbscan(int n, int minPts, F vecinosFn) {
     return etiqueta;
 }
 
-// Version clasica: busqueda lineal O(n) por consulta -> O(n^2)
+// Version clasica
 vector<int> dbscanClasico(const vector<Punto>& P, double eps, int minPts) {
     double eps2 = eps * eps;
     return dbscan((int)P.size(), minPts, [&](int q) {
@@ -112,7 +112,7 @@ vector<int> dbscanClasico(const vector<Punto>& P, double eps, int minPts) {
     });
 }
 
-// Version con KDTree: consulta O(log n) en promedio (baja dimension)
+// Version con KDTree
 vector<int> dbscanKD(const vector<Punto>& P, double eps, int minPts, double& tConstruccion) {
     auto t0 = chrono::high_resolution_clock::now();
     KDTree kd(P);
@@ -120,7 +120,7 @@ vector<int> dbscanKD(const vector<Punto>& P, double eps, int minPts, double& tCo
     return dbscan((int)P.size(), minPts, [&](int q) { return kd.vecinos(q, eps); });
 }
 
-// ---------- Funcion pedida en la evaluacion ----------
+// Funcion
 int contarOutliers(const vector<int>& et) { return count(et.begin(), et.end(), -1); }
 int contarClusters(const vector<int>& et) { return et.empty() ? 0 : max(0, *max_element(et.begin(), et.end())); }
 

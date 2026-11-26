@@ -1,4 +1,4 @@
-# Genera los dos datasets (2D y 6D) y los guarda como csv con cabecera
+# Genera los dos datasets y los guarda como csv con cabecera
 import numpy as np, pandas as pd
 from sklearn.datasets import make_moons, make_blobs
 from sklearn.preprocessing import StandardScaler
