@@ -93,6 +93,50 @@ pdflatex informe.tex
 ```
 (dos veces, para que las referencias se resuelvan). La carpeta `resultados/` debe estar junto al `.tex`.
 
+## Usar otro dataset desde otro computador
+
+`dbscan.exe` no está en GitHub (está en el `.gitignore`), así que en una máquina nueva hay que clonar el repositorio y compilar de nuevo.
+
+1. Clona el repositorio:
+   ```
+   git clone https://github.com/GonzaloSumina/DBScan.git
+   cd DBScan
+   ```
+2. Instala y compila siguiendo la sección **Instalación** de arriba (Python normal con entorno virtual, librerías con `pip` y `g++ -O2 -std=c++17 -o dbscan dbscan.cpp`).
+3. Copia tu CSV a la carpeta `datos/` y ejecuta:
+   ```
+   python evaluar.py datos/nuevo.csv
+   ```
+   o con tus parámetros:
+   ```
+   python evaluar.py datos/nuevo.csv 0.5 10
+   ```
+   Sirve para cualquier CSV con 2 o más dimensiones. Imprime outliers, clusters, silueta y tiempos, y guarda `clusterizacion.png`.
+
+### Repetir todos los experimentos con tu dataset
+
+Edita `analisis.py` y cambia el diccionario `config`: el nombre, la ruta del CSV y la lista de pares `(eps, minPts)` que quieras probar.
+
+```python
+config = {
+    "mi_dataset": ("datos/nuevo.csv", [(0.3, 10), (0.5, 10), (0.8, 10), (0.5, 30)]),
+}
+```
+
+Para elegir esos valores, corre primero `evaluar.py` y usa el `eps` sugerido como referencia. Los experimentos de tiempo con datos sintéticos se generan solos y no dependen de tu dataset.
+
+### Requisitos del CSV
+- Con `evaluar.py`: cabecera opcional, separador `,` o `;`, y las columnas de texto se ignoran.
+- Con `dbscan` / `dbscan.exe` directamente: una fila de cabecera y solo columnas numéricas.
+
+### Subir los cambios desde esa máquina
+```
+git add .
+git commit -m "Descripción del cambio"
+git push
+```
+GitHub pedirá iniciar sesión la primera vez. Si sigues trabajando en otra máquina, ejecuta `git pull` antes de modificar archivos para evitar conflictos.
+
 ## Problemas frecuentes
 
 - **`"." no se reconoce como comando`** (Windows): en el CMD no uses `./`; escribe `dbscan.exe`.
