@@ -10,19 +10,19 @@ from sklearn.datasets import make_blobs, make_moons
 from sklearn.preprocessing import StandardScaler
 
 def correr(csv, eps, mp, salida="resultados/tmp.csv"):
-    txt = subprocess.run(["./dbscan", csv, str(eps), str(mp), salida], capture_output=True, text=True).stdout
+    txt = subprocess.run(["dbscan.exe", csv, str(eps), str(mp), salida], capture_output=True, text=True).stdout
     tc, tk = map(float, re.findall(r"clasico_s=([\d.e-]+) kdtree_s=([\d.e-]+)", txt)[0])
     cl, out = map(int, re.findall(r"clusters=(\d+) outliers=(\d+)", txt)[0])
     ok = "resultados_iguales=si" in txt
     return tc, tk, cl, out, ok, pd.read_csv(salida)["etiqueta"].values
 
 def silueta(X, et):
-    m = et != -1                                  # se evalua sin el ruido
+    m = et != -1   # se evalua sin el ruido
     if len(set(et[m])) < 2: return float("nan")
     return silhouette_score(X[m], et[m])
 
 res = {}
-# ---------- Experimento 1: hiperparametros en cada dataset ----------
+# 1: hiperparametros en cada dataset
 config = {
     "moons_2d": ("datos/moons_2d.csv", [(0.05, 5), (0.1, 5), (0.2, 5), (0.1, 30)]),
     "blobs_6d": ("datos/blobs_6d.csv", [(0.3, 10), (0.6, 10), (1.0, 10), (0.6, 40)]),
@@ -46,7 +46,7 @@ for nombre, (csv, params) in config.items():
 tabla1 = pd.DataFrame(filas, columns=["dataset", "eps", "minPts", "clusters", "outliers", "silhouette", "t_clasico(s)", "t_kdtree(s)", "speedup", "iguales"])
 tabla1.to_csv("resultados/tabla_hiperparametros.csv", index=False)
 
-# ---------- Experimento 2: tiempo vs tamano n (2D) ----------
+# 2: tiempo vs tamano n (2D)
 Xf, _ = make_moons(n_samples=40000, noise=0.07, random_state=1)
 Xf = StandardScaler().fit_transform(Xf)
 filas = []
@@ -61,7 +61,7 @@ plt.xlabel("n puntos"); plt.ylabel("tiempo (s)"); plt.legend(); plt.title("Tiemp
 plt.savefig("resultados/tiempo_vs_n.png", dpi=110); plt.close()
 t2.round(4).to_csv("resultados/tabla_tiempo_n.csv", index=False)
 
-# ---------- Experimento 3: tiempo vs dimension (n=4000) ----------
+# 3: tiempo vs dimension (n=4000)
 filas = []
 for d in [2, 4, 8, 16, 32]:
     X, _ = make_blobs(n_samples=4000, n_features=d, centers=4, random_state=0)
@@ -77,7 +77,7 @@ plt.xlabel("dimension"); plt.ylabel("tiempo (s)"); plt.legend(); plt.title("Tiem
 plt.savefig("resultados/tiempo_vs_dim.png", dpi=110); plt.close()
 t3.round(4).to_csv("resultados/tabla_tiempo_dim.csv", index=False)
 
-# ---------- Grafico k-distance (para elegir eps) ----------
+# Grafico k-distance (para elegir eps)
 fig, ax = plt.subplots(1, 2, figsize=(9, 3.4))
 for a, (nombre, k) in zip(ax, [("moons_2d", 5), ("blobs_6d", 10)]):
     X = pd.read_csv(config[nombre][0]).values
