@@ -1,5 +1,25 @@
+# Ejecutables compilados
 dbscan.exe
-salida.csv
-__pycache__/
+dbscan
+*.exe
+*.o
+
+# Salidas y archivos temporales de las pruebas
+salida*.csv
+*_tmp.csv
+tmp.csv
 clusterizacion.png
+
+# Entorno de Python
 venv/
+__pycache__/
+*.pyc
+
+# Archivos auxiliares de LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
