@@ -26,6 +26,7 @@ res = {}
 config = {
     "moons_2d": ("datos/moons_2d.csv", [(0.05, 5), (0.1, 5), (0.2, 5), (0.1, 30)]),
     "blobs_6d": ("datos/blobs_6d.csv", [(0.3, 10), (0.6, 10), (1.0, 10), (0.6, 40)]),
+    # AGREGAR NUEVO DATASET
 }
 filas = []
 for nombre, (csv, params) in config.items():
