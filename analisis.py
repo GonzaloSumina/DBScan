@@ -24,8 +24,9 @@ def silueta(X, et):
 res = {}
 # 1: hiperparametros en cada dataset
 config = {
-    "moons_2d": ("datos/moons_2d.csv", [(0.05, 5), (0.1, 5), (0.2, 5), (0.1, 30)]),
-    "blobs_6d": ("datos/blobs_6d.csv", [(0.3, 10), (0.6, 10), (1.0, 10), (0.6, 40)]),
+    # "moons_2d": ("datos/moons_2d.csv", [(0.05, 5), (0.1, 5), (0.2, 5), (0.1, 30)]),
+    # "blobs_6d": ("datos/blobs_6d.csv", [(0.3, 10), (0.6, 10), (1.0, 10), (0.6, 40)]),
+    "output": ("datos/output.csv", [(0.061, 4), (0.2, 5), (0.3, 5), (0.2, 30)]),
     # AGREGAR NUEVO DATASET
 }
 filas = []
@@ -80,7 +81,7 @@ t3.round(4).to_csv("resultados/tabla_tiempo_dim.csv", index=False)
 
 # Grafico k-distance (para elegir eps)
 fig, ax = plt.subplots(1, 2, figsize=(9, 3.4))
-for a, (nombre, k) in zip(ax, [("moons_2d", 5), ("blobs_6d", 10)]):
+for a, (nombre, k) in zip(ax, [("output", 4)]):
     X = pd.read_csv(config[nombre][0]).values
     d, _ = NearestNeighbors(n_neighbors=k).fit(X).kneighbors(X)
     a.plot(np.sort(d[:, -1])); a.set_title(f"{nombre}: distancia al vecino {k}"); a.set_xlabel("puntos ordenados"); a.set_ylabel("distancia")

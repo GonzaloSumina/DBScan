@@ -125,7 +125,7 @@ int contarOutliers(const vector<int>& et) { return count(et.begin(), et.end(), -
 int contarClusters(const vector<int>& et) { return et.empty() ? 0 : max(0, *max_element(et.begin(), et.end())); }
 
 int main(int argc, char** argv) {
-    if (argc < 5) { cout << "Uso: g++ -O2 -std=c++17 -o dbscan dbscan.cpp"; cout<<" dbscan.exe datos\moons_2d.csv 0.1 5 salida.csv\n"; return 1; }
+    if (argc < 5) { cout << "Uso: g++ -O2 -std=c++17 -o dbscan dbscan.cpp"; cout<<R"(dbscan.exe datos\moons_2d.csv 0.1 5 salida.csv\n)"; return 1; }
     vector<Punto> P = leerCSV(argv[1]);
     double eps = stod(argv[2]);
     int minPts = stoi(argv[3]);

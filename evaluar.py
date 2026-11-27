@@ -1,5 +1,7 @@
 import sys, os, re, subprocess
 import numpy as np, pandas as pd, matplotlib
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from sklearn.metrics import silhouette_score
 from sklearn.decomposition import PCA
@@ -10,8 +12,7 @@ ruta = sys.argv[1]
 df = pd.read_csv(ruta, sep=None, engine="python")
 if any(re.fullmatch(r"-?[\d.]+(e-?\d+)?", str(c)) for c in df.columns):   # no habia cabecera
     df = pd.read_csv(ruta, sep=None, engine="python", header=None)
-X = df.select_dtypes(include=[np.number]).dropna().values
-X = StandardScaler().fit_transform(X)                                      # misma escala en todas las columnas
+X = df.values                                   # misma escala en todas las columnas
 n, d = X.shape
 print(f"Datos: {n} puntos, {d} dimensiones")
 
@@ -46,4 +47,5 @@ plt.scatter(X2[m, 0], X2[m, 1], c=et[m], s=6, cmap="tab10")
 plt.scatter(X2[~m, 0], X2[~m, 1], c="k", s=10, marker="x", label="outliers")
 plt.title(f"DBSCAN eps={eps:.3f} minPts={minPts}: {clusters} clusters, {outliers} outliers" + (" (PCA 2D)" if d > 2 else ""), fontsize=9)
 plt.legend(); plt.tight_layout(); plt.savefig("clusterizacion.png", dpi=120)
-print("Grafica guardada en clusterizacion.png"); plt.show()
+print("Grafica guardada en clusterizacion.png"); plt.savefig("resultado_evaluacion.png", dpi=150)
+plt.close()
